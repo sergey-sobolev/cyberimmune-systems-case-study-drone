@@ -248,7 +248,7 @@ def test_repeated_task():
     global messages
     print(messages)
     details = json.loads(str(messages[len(messages)-1]))
-    assert details['operation'] == 'reject'
+    assert details['operation'] == 'task'
     messages = []
     deactivate()
 
