@@ -162,7 +162,95 @@ Message bus и Security Monitor на диаграммах опущены для 
 
 
 ```python {lineNo:true}
+import time
+from producer import proceed_to_deliver
 
+
+ordering = False
+activated = False
+
+def check_operation(id, details):
+    global ordering
+    global activated
+    authorized = False
+
+   # print(f"[info] checking policies for event {id},"\
+   #       f" {details['source']}->{details['deliver_to']}: {details['operation']}")
+    src = details['source']
+    dst = details['deliver_to']
+    operation = details['operation']
+   
+    if not activated:
+      if src == 'connector' and dst == 'dispatcher' \
+         and operation == 'activate':
+            activated = True
+            authorized = True    
+    else:
+        if src == 'connector' and dst == 'monitor' \
+            and operation == 'deactivate':
+            activated = False
+            authorized = True  
+
+    if activated:
+        if not ordering:
+            if  src == 'connector' and dst == 'dispatcher' \
+                and operation == 'task' and len(details) == 12 :
+                authorized = True 
+        else:
+            det = details.copy()
+            det['operation'] = 'reject'
+            det['deliver_to'] = 'monitor'
+            print('rejected')
+            proceed_to_deliver(det['id'], det)
+            time.sleep(1)
+                #todo check content of another fields
+        if src == 'dispatcher' and dst == 'position' \
+            and operation == 'move_to':
+            authorized = True  
+        if src == 'dispatcher' and dst == 'position' \
+            and operation == 'where_am_i':
+            authorized = True    
+        if src == 'dispatcher' and dst == 'sprayer' \
+            and operation == 'stop':
+            authorized = True  
+        if src == 'dispatcher' and dst == 'sprayer' \
+            and operation == 'start':
+            authorized = True    
+        if src == 'dispatcher' and dst == 'connector' \
+            and operation == 'ask_task':
+            authorized = True
+        if  src == 'dispatcher' and dst == 'connector'\
+            and operation == 'error':
+            authorized = True
+        if  src == 'dispatcher' and dst == 'position'\
+            and operation == 'nonexistent':
+            authorized = True
+        if  src == 'dispatcher' and dst == 'position'\
+            and operation == 'nonexistent2':
+            authorized = True
+        if  src == 'dispatcher' and dst == 'connector'\
+            and operation == 'operation_status':
+            authorized = True
+            ordering = False
+
+        if  src == 'position' and dst == 'dispatcher'\
+            and operation == 'parameters':
+            authorized = True
+        if  src == 'position' and dst == 'dispatcher'\
+            and operation == 'spraying':
+            authorized = True
+        if  src == 'position' and dst == 'dispatcher'\
+            and operation == 'operation_status':
+            authorized = True
+        if  src == 'position' and dst == 'dispatcher'\
+            and operation == 'coordinates':
+            authorized = True
+            
+        if  src == 'recognizer' and dst == 'dispatcher'\
+            and operation == 'obstruction':
+            authorized = True
+
+    return authorized
 
 
 ```
@@ -177,13 +265,24 @@ Message bus и Security Monitor на диаграммах опущены для 
 
 _Предполагается, что в ходе подготовки рабочего места все системные пакеты были установлены._
 
-Запуск примера: открыть окно терминала в Visual Studio code, в папке chemical-ICS с исходным кодом выполнить
+Запуск примера: открыть окно терминала в Visual Studio code, в папке drone с исходным кодом выполнить
 
 **make run**
 или **docker-compose up -d**
 
 Примечание: сервисам требуется некоторое время для начала обработки входящих сообщений от kafka, поэтому перед переходом к тестам следует сделать паузу 1-2 минуты
 
+
 запуск тестов (на данный момент отсутсвуют):
 **make test**
 или **pytest**
+
+```python {lineNo:true}
+tests/e2e/test_update.py::test_activate PASSED
+tests/e2e/test_update.py::test_asking_task PASSED
+tests/e2e/test_update.py::test_write_order PASSED
+tests/e2e/test_update.py::test_success_result PASSED
+tests/e2e/test_update.py::test_surface_result PASSED
+tests/e2e/test_update.py::test_activate_without_token PASSED
+tests/e2e/test_update.py::test_repeated_task PASSED
+```
