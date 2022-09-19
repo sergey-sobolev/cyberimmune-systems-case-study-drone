@@ -206,30 +206,30 @@ def send_wrong_task():
         headers={"Content-Type": "application/json", "auth": "very-secure-token"},
     )
 
-# def test_bruteforce():
-#     time.sleep(5)
-#     event = threading.Event()
-#     activate()
-#     time.sleep(5)
-#     thread = threading.Thread(target=lambda: listener(event))
-#     thread.start()
-#     time.sleep(5)
-#     send_wrong_task()
-#     time.sleep(1)
-#     send_wrong_task()
-#     time.sleep(1)
-#     send_wrong_task()
-#     time.sleep(1)
-#     send_wrong_task()
-#     time.sleep(3)
-#     event.set()
-#     thread.join()
-#     global messages
-#     details = json.loads(str(messages[len(messages)-1]))
-#     assert details['operation'] == 'error' # id
-#     assert details['err_msg'] == 'Bruteforce!'
-#     messages = []
-#     deactivate()
+ def test_bruteforce():
+     time.sleep(10)
+     event = threading.Event()
+     activate()
+     time.sleep(5)
+     thread = threading.Thread(target=lambda: listener(event))
+     thread.start()
+     time.sleep(5)
+     send_wrong_task()
+     time.sleep(1)
+     send_wrong_task()
+     time.sleep(1)
+     send_wrong_task()
+     time.sleep(1)
+     send_wrong_task()
+     time.sleep(3)
+     event.set()
+     thread.join()
+     global messages
+     details = json.loads(str(messages[len(messages)-1]))
+     assert details['operation'] == 'error' # id
+     assert details['err_msg'] == 'Task is under bruteforce!'
+     messages = []
+     deactivate()
 
 def test_repeated_task():
     time.sleep(10)
