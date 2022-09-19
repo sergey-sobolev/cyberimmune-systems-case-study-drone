@@ -246,7 +246,7 @@ def test_repeated_task():
     event.set()
     thread.join()
     global messages
-    print(messages)
+    #print(messages)
     details = json.loads(str(messages[len(messages)-1]))
     assert details['operation'] == 'task'
     messages = []
