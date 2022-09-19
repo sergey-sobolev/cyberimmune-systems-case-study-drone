@@ -363,15 +363,7 @@ _Предполагается, что в ходе подготовки рабо�
 или **pytest**
 
 Будут выполнены 8 тестов, 5 на корректность работы, 3 на безопасность, рассчетное время выполнения ~ 5 минут 45 секунд.
-Ожидаемый результат выглядит следующим образом:
+Ожидаемый результат выглядит следующим образом (на слайде так же присутсвует отладочная информация - при вашем запуске ее не будет):
 
-```python {lineNo:true}
-tests/e2e/test_update.py::test_activate PASSED
-tests/e2e/test_update.py::test_asking_task PASSED
-tests/e2e/test_update.py::test_write_order PASSED
-tests/e2e/test_update.py::test_success_result PASSED
-tests/e2e/test_update.py::test_surface_result PASSED
-tests/e2e/test_update.py::test_activate_without_token PASSED
-tests/e2e/test_update.py::test_bruteforce PASSED
-tests/e2e/test_update.py::test_repeated_task PASSED
-```
+
+![Tests](./pics/tests.png?raw=true "Тесты")
