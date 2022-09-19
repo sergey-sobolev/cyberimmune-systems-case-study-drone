@@ -19,11 +19,17 @@ There shall be docker-compose locally available - at least for running message b
 
 ### Running complete demo in containerized mode
 
+if it's first use, use next commands one by one:
+
+docker-compose build
+make prepare
+make run
+make create_topics
 execute in VS Code terminal window either
-- _make run_
-- or _docker-compose up_
 
+make run
+or docker-compose up
 
-#### Troubleshooting
-
-- if kafka or zookeeper containers don't start, make sure you don't have containers with the same name. If you do, remove the old containers and run the demo again.
+### Troubleshooting
+if kafka or zookeeper containers don't start, make sure you don't have containers with the same name. If you do, remove the old containers and run the demo again.
+also broken can be down after start - use up command to reload it and everything will be okay.
