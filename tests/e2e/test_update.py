@@ -206,7 +206,7 @@ def send_wrong_task():
         headers={"Content-Type": "application/json", "auth": "very-secure-token"},
     )
 
- def test_bruteforce():
+def test_bruteforce():
      time.sleep(10)
      event = threading.Event()
      activate()
